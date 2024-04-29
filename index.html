@@ -44,19 +44,17 @@
         </form>
       </div>
     </nav>
-    <!-- Content section -->
-    <div
-      id="content"
-      class="container card mt-3 shadow-sm p-3 mb-5 bg-white rounded"
-    >
-      <!-- Added 30 px space from the nvabar -->
-      <h1>{{ pages[activePage].pageTitle }}</h1>
-      <p>{{ pages[activePage].content }}</p>
-    </div>
+
+    <!-- Your page-viewer component -->
+    <page-viewer
+      :page-title="pages[activePage].pageTitle"
+      :page-content="pages[activePage].content"
+    ></page-viewer>
 
     <!-- Vue.js script -->
     <script>
-      Vue.createApp({
+      // Define the Vue app instance
+      const app = Vue.createApp({
         data() {
           return {
             activePage: 0, // Index of the active page
@@ -85,14 +83,24 @@
           // Method to change the theme
           changeTheme() {
             // Toggle between light and dark themes
-            let theme = "light";
-            if (this.theme == "light") {
-              theme = "dark";
-            }
-            this.theme = theme; // Update the theme
+            this.theme = this.theme === "light" ? "dark" : "light"; // Update the theme
           },
         },
-      }).mount("body"); // Mount the Vue app to the body element
+      });
+
+      // Register the page-viewer component
+      app.component("page-viewer", {
+        props: ["pageTitle", "pageContent"],
+        template: `
+        <div class="container card mt-3 shadow-sm p-3 mb-5 bg-white rounded">
+          <h1>{{pageTitle}}</h1>
+          <p>{{pageContent}}</p>
+        </div>
+      `,
+      });
+
+      // Mount the Vue app to the body element
+      app.mount("body");
     </script>
   </body>
 </html>
