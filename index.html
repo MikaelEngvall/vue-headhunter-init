@@ -15,7 +15,7 @@
   <body>
     <!-- Navbar with dynamic class bindings for theme -->
     <nav
-      class="navbar navbar-expand-lg"
+      class="navbar navbar-expand-lg mb-3"
       :class="[`navbar-${theme}`, `bg-${theme}`, 'navbar', 'navbar-expand-lg']"
     >
       <div class="container-fluid">
@@ -45,7 +45,8 @@
       </div>
     </nav>
     <!-- Content section -->
-    <div id="content" class="container">
+    <div id="content" class="container card mt-3">
+      <!-- Added 30 px space from the nvabar -->
       <h1>{{ pages[activePage].pageTitle }}</h1>
       <p>{{ pages[activePage].content }}</p>
     </div>
