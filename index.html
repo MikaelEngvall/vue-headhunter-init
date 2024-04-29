@@ -13,39 +13,9 @@
     <script src="https://unpkg.com/vue@3"></script>
   </head>
   <body>
-    <!-- Navbar with dynamic class bindings for theme -->
-    <nav
-      class="navbar navbar-expand-lg mb-3"
-      :class="[`navbar-${theme}`, `bg-${theme}`, 'navbar', 'navbar-expand-lg']"
-    >
-      <div class="container-fluid">
-        <!-- Navbar brand -->
-        <a class="navbar-brand" href="index.html">Headhunter</a>
-        <!-- Navbar links -->
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <!-- Loop through pages array to generate navbar links -->
-          <li v-for="(page, index) in pages" class="nav-item" :key="index">
-            <a
-              class="nav-link"
-              :class="{active: activePage == index}"
-              aria-current="page"
-              :href="page.link.url"
-              :title="`This link goes to the ${page.link.text} page`"
-              @click.prevent="activePage = index"
-              >{{ page.link.text }}</a
-            >
-          </li>
-        </ul>
-        <!-- Button to toggle theme -->
-        <form class="d-flex">
-          <button class="btn btn-primary" @click.prevent="changeTheme()">
-            Toggle theme
-          </button>
-        </form>
-      </div>
-    </nav>
-
-    <!-- Your page-viewer component -->
+    <!-- Navbar component -->
+    <navbar :pages="pages" :active-page="activePage"> </navbar>
+    <!-- Page-viewer component -->
     <page-viewer :page="pages[activePage]"></page-viewer>
 
     <!-- Vue.js script -->
@@ -55,7 +25,6 @@
         data() {
           return {
             activePage: 0, // Index of the active page
-            theme: "dark", // Current theme, initially set to dark
             pages: [
               // Array of page objects
               {
@@ -76,6 +45,57 @@
             ],
           };
         },
+      });
+
+      // Register the page-viewer component
+      app.component("page-viewer", {
+        props: ["page"],
+        template: `
+          <div class="container card mt-3 shadow-sm p-3 mb-5 bg-white rounded">
+            <h1>{{page.pageTitle}}</h1>
+            <p>{{page.content}}</p>
+          </div>
+        `,
+      });
+
+      app.component("navbar", {
+        props: ["pages", "activePage"],
+        template: `
+            <nav
+              :class="[\`navbar-\${theme}\`, \`bg-\${theme}\`, 'navbar', 'navbar-expand-lg']"
+            >
+              <div class="container-fluid">
+                <!-- Navbar brand -->
+                <a class="navbar-brand" href="index.html">Headhunter</a>
+                <!-- Navbar links -->
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <!-- Loop through pages array to generate navbar links -->
+                  <li v-for="(page, index) in pages" class="nav-item" :key="index">
+                    <a
+                      class="nav-link"
+                      :class="{active: activePage == index}"
+                      aria-current="page"
+                      :href="page.link.url"
+                      :title="\`This link goes to the \${page.link.text} page\`"
+                      @click.prevent="activePage = index"
+                      >{{ page.link.text }}</a
+                    >
+                  </li>
+                </ul>
+                <!-- Button to toggle theme -->
+                <form class="d-flex">
+                  <button class="btn btn-primary" @click.prevent="changeTheme()">
+                    Toggle theme
+                  </button>
+                </form>
+              </div>
+            </nav>
+          `,
+        data() {
+          return {
+            theme: "light",
+          };
+        },
         methods: {
           // Method to change the theme
           changeTheme() {
@@ -83,17 +103,6 @@
             this.theme = this.theme === "light" ? "dark" : "light"; // Update the theme
           },
         },
-      });
-
-      // Register the page-viewer component
-      app.component("page-viewer", {
-        props: ["page"],
-        template: `
-        <div class="container card mt-3 shadow-sm p-3 mb-5 bg-white rounded">
-          <h1>{{page.pageTitle}}</h1>
-          <p>{{page.pageContent}}</p>
-        </div>
-      `,
       });
 
       // Mount the Vue app to the body element
