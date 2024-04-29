@@ -46,10 +46,7 @@
     </nav>
 
     <!-- Your page-viewer component -->
-    <page-viewer
-      :page-title="pages[activePage].pageTitle"
-      :page-content="pages[activePage].content"
-    ></page-viewer>
+    <page-viewer :page="pages[activePage]"></page-viewer>
 
     <!-- Vue.js script -->
     <script>
@@ -90,11 +87,11 @@
 
       // Register the page-viewer component
       app.component("page-viewer", {
-        props: ["pageTitle", "pageContent"],
+        props: ["page"],
         template: `
         <div class="container card mt-3 shadow-sm p-3 mb-5 bg-white rounded">
-          <h1>{{pageTitle}}</h1>
-          <p>{{pageContent}}</p>
+          <h1>{{page.pageTitle}}</h1>
+          <p>{{page.pageContent}}</p>
         </div>
       `,
       });
